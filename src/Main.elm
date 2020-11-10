@@ -2,6 +2,8 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (Html)
+import Html.Attributes
+import Html.Events
 import Platform exposing (Program)
 
 
@@ -24,7 +26,12 @@ initialModel =
 
 view : Model -> Html Msg
 view model =
-    Html.div [] [ Html.text "Hello World" ]
+    Html.main_
+        []
+        [ viewDifficulty model.difficulty Standard
+        , viewDifficulty model.difficulty Risky
+        , viewDifficulty model.difficulty Dangerous
+        ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -42,7 +49,47 @@ type Msg
 type Difficulty
     = Standard
     | Risky
-    | Difficult
+    | Dangerous
+
+
+viewDifficulty : Difficulty -> Difficulty -> Html Msg
+viewDifficulty selectedDifficulty difficulty =
+    let
+        str =
+            case difficulty of
+                Standard ->
+                    "Standard"
+
+                Risky ->
+                    "Risky"
+
+                Dangerous ->
+                    "Dangerous"
+
+        strLower =
+            String.toLower str
+    in
+    Html.div
+        [ Html.Attributes.class "difficulty__button"
+        , Html.Attributes.class ("difficulty__button--" ++ strLower)
+        , Html.Attributes.classList
+            [ ( "difficulty__button--selected", difficulty == selectedDifficulty )
+            ]
+        ]
+        [ Html.input
+            [ Html.Attributes.type_ "radio"
+            , Html.Attributes.name "difficulty__button__radio"
+            , Html.Attributes.id ("difficulty__button__radio--" ++ strLower)
+            , Html.Attributes.class ("difficulty__button__radio--" ++ strLower)
+            , Html.Events.onInput (\_ -> SetDifficulty difficulty)
+            ]
+            []
+        , Html.label
+            [ Html.Attributes.for ("difficulty__button__radio--" ++ strLower)
+            , Html.Attributes.class "difficulty__button__label"
+            ]
+            [ Html.text str ]
+        ]
 
 
 main : Program () Model Msg
