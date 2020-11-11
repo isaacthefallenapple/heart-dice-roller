@@ -1,0 +1,98 @@
+$clr-primary: #680000;
+$clr-secondary: rgba($clr-primary, 0.7);
+
+* {
+	font-family: sans-serif;
+}
+
+body {
+	background-color: $clr-secondary;
+}
+
+main {
+	display: flex;
+
+	flex-direction: column;
+
+	row-gap: 5px;
+
+	align-content: center;
+	justify-content: center;
+	justify-items: center;
+	align-items: center;
+}
+
+.difficulty {
+	width: 90%;
+	display: flex;
+
+	justify-content: space-between;
+
+	column-gap: 5px;
+
+	&__button {
+		width: 30%;
+		height: 4em;
+
+		background-color: $clr-secondary;
+
+		&--selected {
+			background-color: $clr-primary;
+		}
+
+		&__radio {
+			display: none;
+		}
+
+		&__label {
+			font-size: 2em;
+			color: white;
+
+			display: flex;
+
+			align-items: center;
+			justify-content: center;
+
+			width: 100%;
+			height: 100%;
+		}
+	}
+}
+
+.modifiers {
+	width: 90%;
+
+	display: flex;
+
+	justify-content: space-between;
+
+	column-gap: 5px;
+
+	&__button {
+		width: 30%;
+		height: 4em;
+
+		background-color: $clr-secondary;
+
+		&--active {
+			background-color: $clr-primary;
+		}
+
+		&__checkbox {
+			display: none;
+		}
+
+		&__label {
+			font-size: 2em;
+			color: white;
+
+			display: flex;
+
+			align-items: center;
+			justify-content: center;
+
+			width: 100%;
+			height: 100%;
+		}
+	}
+}
