@@ -15,6 +15,19 @@ import Svg
 import Svg.Attributes
 
 
+classListCond : List String -> List String -> Bool -> Html.Attribute msg
+classListCond ifFalse ifTrue condition =
+    Html.Attributes.class
+        (String.join " "
+            (if condition then
+                ifTrue
+
+             else
+                ifFalse
+            )
+        )
+
+
 type alias Model =
     { skill : Bool
     , domain : Bool
@@ -68,6 +81,9 @@ view model =
     let
         dicepool =
             dicePool model
+
+        buttonClasses =
+            classListCond [ "bg-red" ] [ "bg-red-dark", "shadow" ]
     in
     Html.div
         []
@@ -83,7 +99,8 @@ view model =
                 [ Html.Attributes.class "[ spread ]" ]
                 [ Html.button
                     [ Html.Events.onClick ToggledSkill
-                    , Html.Attributes.class "[ bg-red block-padding-300 ]"
+                    , Html.Attributes.class "[ block-padding-300 ]"
+                    , buttonClasses model.skill
                     ]
                     [ Html.span
                         []
@@ -92,6 +109,7 @@ view model =
                 , Html.button
                     [ Html.Events.onClick ToggledDomain
                     , Html.Attributes.class "[ bg-red block-padding-300 ]"
+                    , buttonClasses model.domain
                     ]
                     [ Html.span
                         []
@@ -100,13 +118,16 @@ view model =
                 , Html.button
                     [ Html.Events.onClick ToggledMastery
                     , Html.Attributes.class "[ bg-red block-padding-300 ]"
+                    , buttonClasses model.mastery
                     ]
                     [ Html.span
                         []
                         [ Html.text "Mastery" ]
                     ]
                 , Html.span
-                    [ Html.Attributes.class "[ bg-red block-padding-300 ]" ]
+                    [ Html.Attributes.class "[ bg-red block-padding-300 centered-text ] [ help ]"
+                    , buttonClasses (model.assistance > 0)
+                    ]
                     [ Html.button
                         [ Html.Events.onClick DecreasedAssistance
                         ]
@@ -139,7 +160,7 @@ view model =
                                 Action.rollToOutcome r
                         in
                         Html.section
-                            []
+                            [ Html.Attributes.class "bg-red-dark centered-text shadow block-padding-400" ]
                             [ Html.div
                                 []
                                 [ let

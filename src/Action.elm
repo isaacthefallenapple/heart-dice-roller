@@ -1,5 +1,6 @@
 module Action exposing (..)
 
+import Dict exposing (diff)
 import Die exposing (Die)
 import Html exposing (Html)
 import Html.Attributes
@@ -160,8 +161,19 @@ viewAction normalToDice difficultToDie action =
 viewDifficulty : (Difficulty -> msg) -> Difficulty -> Difficulty -> Html msg
 viewDifficulty toMsg selectedDifficulty difficulty =
     let
-        str =
-            case difficulty of
+        isSelected =
+            difficulty == selectedDifficulty
+    in
+    Html.button
+        [ Html.Events.onClick (toMsg difficulty)
+        , Html.Attributes.class "[ bg-red block-padding-300 ]"
+        , Html.Attributes.classList
+            [ ( "bg-red", not isSelected )
+            , ( "bg-red-dark shadow", isSelected )
+            ]
+        ]
+        [ Html.text
+            (case difficulty of
                 Standard ->
                     "Standard"
 
@@ -170,20 +182,5 @@ viewDifficulty toMsg selectedDifficulty difficulty =
 
                 Dangerous ->
                     "Dangerous"
-
-        strLower =
-            String.toLower str
-
-        id =
-            "button-row__radio--" ++ strLower
-    in
-    Html.button
-        [ Html.Events.onClick (toMsg difficulty)
-        , Html.Attributes.class "[ bg-red block-padding-300 ]"
-        ]
-        [ Html.label
-            [ Html.Attributes.for id
-            ]
-            [ Html.text str
-            ]
+            )
         ]

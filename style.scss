@@ -5,6 +5,7 @@
 	--color-base: white;
 	--flow-space: 1rem;
 	--column-gap: 1rem;
+	--color-shadow: #000;
 }
 
 .color-red {
@@ -85,7 +86,6 @@ main {
 	display: flex;
 	justify-content: space-between;
 	align-items: stretch;
-
 	column-gap: var(--column-gap);
 
 	&>* {
@@ -95,4 +95,29 @@ main {
 
 .full-width {
 	width: 100%;
+}
+
+.shadow {
+	box-shadow: 5px 5px var(--color-shadow);
+}
+
+.help {
+	position: relative;
+
+	button {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 2rem;
+		background: #000;
+
+
+		&:first-of-type {
+			left: 0;
+		}
+
+		&:last-of-type {
+			right: 0;
+		}
+	}
 }
