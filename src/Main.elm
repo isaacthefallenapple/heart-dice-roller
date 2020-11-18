@@ -129,8 +129,16 @@ view model =
                     , buttonClasses (model.assistance > 0)
                     ]
                     [ Html.button
-                        [ Html.Events.onClick DecreasedAssistance
-                        ]
+                        (List.append
+                            [ Html.Events.onClick DecreasedAssistance
+                            ]
+                            (if model.assistance == 0 then
+                                [ Html.Attributes.attribute "data-state" "greyed-out" ]
+
+                             else
+                                []
+                            )
+                        )
                         [ Html.text "-" ]
                     , Html.span
                         []

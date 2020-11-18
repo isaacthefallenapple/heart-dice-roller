@@ -2,7 +2,7 @@
 	--color-red: #7b0404;
 	--color-red-dark: hsl(0, 94%, 20%);
 	--color-bg: #e5decd;
-	--color-base: white;
+	--color-base: 255, 255, 255;
 	--flow-space: 1rem;
 	--column-gap: 1rem;
 	--color-shadow: #000;
@@ -17,7 +17,8 @@
 }
 
 .color-base {
-	color: var(--color-base);
+	color: #{'rgb(var(--color-base), 1)'};
+
 }
 
 .bg-primary {
@@ -54,7 +55,7 @@ body,
 button {
 	font-family: 'Medula One', cursive;
 	font-size: 2rem;
-	color: var(--color-base);
+	color: #{'rgb(var(--color-base), 1)'};
 
 	padding: 0;
 }
@@ -109,8 +110,7 @@ main {
 		top: 0;
 		bottom: 0;
 		width: 2rem;
-		background: #000;
-
+		background: rgba(#000, 0.55);
 
 		&:first-of-type {
 			left: 0;
@@ -118,6 +118,10 @@ main {
 
 		&:last-of-type {
 			right: 0;
+		}
+
+		&[data-state='greyed-out'] {
+			color: #{'RGB(var(--color-base), 0.6)'};
 		}
 	}
 }
