@@ -151,85 +151,9 @@ view model =
             , viewDifficulty Action.Risky
             , viewDifficulty Action.Dangerous
             ]
-        , model.roll
-            |> Maybe.map
-                (\r ->
-                    let
-                        outcome =
-                            Action.rollToOutcome r
-                    in
-                    Html.section
-                        [ Html.Attributes.class "button-row"
-                        , Html.Attributes.class "button-row--result"
-                        , Html.Attributes.class
-                            ("button-row--result--"
-                                ++ (case outcome of
-                                        Outcome.CritFail ->
-                                            "crit-fail"
-
-                                        Outcome.Fail ->
-                                            "fail"
-
-                                        Outcome.SuccAtCost ->
-                                            "succ-at-cost"
-
-                                        Outcome.Succ ->
-                                            "succ"
-
-                                        Outcome.CritSucc ->
-                                            "crit-succ"
-                                   )
-                            )
-                        ]
-                        [ Html.div
-                            [ Html.Attributes.class "button-row__button"
-                            , Html.Attributes.class "button-row__button--banner"
-                            , Html.Attributes.class "button-row__button--active"
-                            ]
-                            [ let
-                                critSucc =
-                                    outcome == Outcome.CritSucc
-
-                                critFail =
-                                    outcome == Outcome.CritFail
-                              in
-                              Html.span
-                                [ Html.Attributes.class "button-row__label"
-                                , Html.Attributes.classList
-                                    [ ( "text-effect__shine", critSucc || critFail )
-                                    , ( "text-effect__shine--crit-succ", critSucc )
-                                    , ( "text-effect__shine--crit-fail", critFail )
-                                    ]
-                                ]
-                                [ Html.text (outcome |> Outcome.toString) ]
-                            ]
-                        ]
-                )
-            |> Maybe.withDefault
-                (Html.section
-                    [ Html.Attributes.class "button-row"
-                    , Html.Attributes.class "button-row--result"
-                    , Html.Attributes.class "button-row--result--blurb"
-                    ]
-                    [ Html.div
-                        [ Html.Attributes.class "button-row__button"
-                        , Html.Attributes.class "button-row__button--banner"
-                        ]
-                        [ Html.span
-                            [ Html.Attributes.class "button-row__label"
-                            ]
-                            [ Html.text
-                                (case dicepool of
-                                    Action.Normal _ _ ->
-                                        "Test Your Fortune, Traveller"
-
-                                    Action.Difficult _ ->
-                                        "Test Your (Mis)Fortune, Traveller"
-                                )
-                            ]
-                        ]
-                    ]
-                )
+        , Html.section
+            []
+            [ Action.viewRollResult dicepool model.roll ]
         , model.roll
             |> Maybe.map Action.viewRoll
             |> Maybe.withDefault (Action.viewDicePool dicepool)

@@ -144,6 +144,30 @@ viewRoll =
         (\v -> { ty = Die.Single, value = Just v })
 
 
+viewRollResult : DicePool -> Maybe Roll -> Html msg
+viewRollResult dicePool maybeRoll =
+    case maybeRoll of
+        Nothing ->
+            Html.div
+                [ Html.Attributes.class "bg-red centered-text"
+                ]
+                [ Html.text
+                    (case dicePool of
+                        Difficult _ ->
+                            "Test Your Misfortune"
+
+                        Normal _ _ ->
+                            "Test Your Fortune"
+                    )
+                ]
+
+        Just roll ->
+            Html.div
+                [ Html.Attributes.class "bg-red-dark centered-text shadow"
+                ]
+                [ Html.text (Outcome.toString (rollToOutcome roll)) ]
+
+
 viewAction : (Difficulty -> n -> List Die) -> (d -> Die) -> Action n d -> Html msg
 viewAction normalToDice difficultToDie action =
     Html.div
