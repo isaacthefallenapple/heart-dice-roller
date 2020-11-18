@@ -152,46 +152,7 @@ view model =
                 , viewDifficulty Action.Risky
                 , viewDifficulty Action.Dangerous
                 ]
-            , model.roll
-                |> Maybe.map
-                    (\r ->
-                        let
-                            outcome =
-                                Action.rollToOutcome r
-                        in
-                        Html.section
-                            [ Html.Attributes.class "bg-red-dark centered-text shadow block-padding-400" ]
-                            [ Html.div
-                                []
-                                [ let
-                                    critSucc =
-                                        outcome == Outcome.CritSucc
-
-                                    critFail =
-                                        outcome == Outcome.CritFail
-                                  in
-                                  Html.span
-                                    []
-                                    [ Html.text (outcome |> Outcome.toString) ]
-                                ]
-                            ]
-                    )
-                |> Maybe.withDefault
-                    (Html.section
-                        []
-                        [ Html.div
-                            [ Html.Attributes.class "[ bg-red centered-text block-padding-400 ]" ]
-                            [ Html.text
-                                (case dicepool of
-                                    Action.Normal _ _ ->
-                                        "Test Your Fortune, Traveller"
-
-                                    Action.Difficult _ ->
-                                        "Test Your (Mis)Fortune, Traveller"
-                                )
-                            ]
-                        ]
-                    )
+            , Action.viewRollResult dicepool model.roll
             , model.roll
                 |> Maybe.map Action.viewRoll
                 |> Maybe.withDefault (Action.viewDicePool dicepool)

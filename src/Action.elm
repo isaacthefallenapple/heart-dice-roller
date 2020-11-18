@@ -1,6 +1,5 @@
 module Action exposing (..)
 
-import Dict exposing (diff)
 import Die exposing (Die)
 import Html exposing (Html)
 import Html.Attributes
@@ -143,6 +142,30 @@ viewRoll =
     viewAction
         diceFromRollResult
         (\v -> { ty = Die.Single, value = Just v })
+
+
+viewRollResult : DicePool -> Maybe Roll -> Html msg
+viewRollResult dicePool maybeRoll =
+    case maybeRoll of
+        Nothing ->
+            Html.div
+                [ Html.Attributes.class "bg-red centered-text block-padding-400"
+                ]
+                [ Html.text
+                    (case dicePool of
+                        Difficult _ ->
+                            "Test Your Misfortune"
+
+                        Normal _ _ ->
+                            "Test Your Fortune"
+                    )
+                ]
+
+        Just roll ->
+            Html.div
+                [ Html.Attributes.class "bg-red-dark centered-text block-padding-400 shadow"
+                ]
+                [ Html.text (Outcome.toString (rollToOutcome roll)) ]
 
 
 viewAction : (Difficulty -> n -> List Die) -> (d -> Die) -> Action n d -> Html msg
