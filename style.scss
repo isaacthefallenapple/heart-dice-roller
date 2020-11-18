@@ -2,7 +2,9 @@
 	--color-red: #7b0404;
 	--color-red-dark: hsl(0, 94%, 20%);
 	--color-bg: #e5decd;
-	--color-base: 255, 255, 255;
+	--color-base-rgb: 255, 255, 255;
+	--color-base-alpha: 1.0;
+	--color-base: rgb(var(--color-base-rgb), var(--color-base-alpha));
 	--inner-gap: 0.8rem;
 	--color-shadow: #000;
 	--flow-space: 1rem;
@@ -17,8 +19,7 @@
 }
 
 .color-base {
-	color: #{'rgb(var(--color-base), 1)'};
-
+	color: var(--color-base);
 }
 
 .bg-primary {
@@ -55,7 +56,7 @@ body,
 button {
 	font-family: 'Medula One', cursive;
 	font-size: 2rem;
-	color: #{'rgb(var(--color-base), 1)'};
+	color: var(--color-base);
 
 	padding: 0;
 }
@@ -66,6 +67,7 @@ button {
 
 main {
 	width: 90vw;
+	min-width: 300px;
 }
 
 .flow>*+* {
@@ -99,7 +101,7 @@ main {
 		display: grid;
 		grid-template-rows: 1fr 1fr;
 		grid-template-columns: 1fr 1fr;
-		row-gap: var(--inner-gap);
+		gap: var(--inner-gap);
 	}
 }
 
@@ -147,7 +149,8 @@ main {
 		}
 
 		&[data-state='greyed-out'] {
-			color: #{'RGB(var(--color-base), 0.6)'};
+			--color-base-alpha: 0.6;
+			color: #{'rgb(var(--color-base-rgb), var(--color-base-alpha))'};
 		}
 	}
 }

@@ -96,7 +96,7 @@ view model =
             [ Html.Attributes.class "[ flow wrapper centered ]"
             ]
             [ Html.section
-                [ Html.Attributes.class "[ spread ] [ modifiers ]" ]
+                [ Html.Attributes.class "[ spread two-by-two ] [ modifiers ]" ]
                 [ Html.button
                     [ Html.Events.onClick ToggledSkill
                     , Html.Attributes.class "[ block-padding-300 ]"
@@ -155,7 +155,7 @@ view model =
                     Action.viewDifficulty SetDifficulty model.difficulty
               in
               Html.section
-                [ Html.Attributes.class "[ spread ] [ difficulty ]" ]
+                [ Html.Attributes.class "[ spread two-by-two ] [ difficulty ]" ]
                 [ viewDifficulty Action.Standard
                 , viewDifficulty Action.Risky
                 , viewDifficulty Action.Dangerous
