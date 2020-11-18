@@ -22,26 +22,12 @@ type DieType
 view : Die -> Html.Html msg
 view { ty, value } =
     Html.div
-        [ Html.Attributes.class "d10"
-        , Html.Attributes.class
-            ("d10"
-                ++ (value
-                        |> Maybe.map ((++) "--" << String.fromInt)
-                        |> Maybe.withDefault ""
-                   )
-            )
-        , Html.Attributes.classList
-            [ ( "d10--subtracted", ty == Subtracted )
-            , ( "d10--difficult", ty == Single )
-            , ( "d10--highlit", ty == Highlit )
-            ]
-        ]
+        []
         [ Html.div
-            [ Html.Attributes.class "d10__img"
-            ]
+            []
             []
         , Html.div
-            [ Html.Attributes.class "d10__highlight" ]
+            []
             []
         ]
 

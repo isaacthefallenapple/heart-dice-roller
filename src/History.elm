@@ -137,19 +137,17 @@ barHeight =
 view : History -> Html.Html msg
 view ((History { record }) as history) =
     Html.div
-        [ Html.Attributes.class "button-row"
-        ]
+        []
         [ Html.details
-            [ Html.Attributes.class "button-row__button" ]
+            []
             [ Html.summary
-                [ Html.Attributes.class "button-row__summary" ]
+                []
                 [ Html.span
-                    [ Html.Attributes.class "button-row__label"
-                    ]
+                    []
                     [ Html.text "History" ]
                 ]
             , Html.div
-                [ Html.Attributes.class "history" ]
+                []
                 [ viewRecord record
                 , viewChart history
                 ]
@@ -160,12 +158,11 @@ view ((History { record }) as history) =
 viewRecord : List Outcome.Outcome -> Html.Html msg
 viewRecord outcomes =
     Html.ul
-        [ Html.Attributes.class "history__record" ]
+        []
         (List.map
             (\outcome ->
                 Html.li
-                    [ Html.Attributes.class "history__item"
-                    ]
+                    []
                     [ Html.text (Outcome.toString outcome) ]
             )
             outcomes

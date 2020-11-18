@@ -147,7 +147,7 @@ viewRoll =
 viewAction : (Difficulty -> n -> List Die) -> (d -> Die) -> Action n d -> Html msg
 viewAction normalToDice difficultToDie action =
     Html.div
-        [ Html.Attributes.class "action" ]
+        []
         (case action of
             Normal difficulty n ->
                 List.map Die.view (normalToDice difficulty n)
@@ -178,16 +178,10 @@ viewDifficulty toMsg selectedDifficulty difficulty =
             "button-row__radio--" ++ strLower
     in
     Html.button
-        [ Html.Attributes.class "button-row__button"
-        , Html.Attributes.class ("button-row__button--" ++ strLower)
-        , Html.Attributes.classList
-            [ ( "button-row__button--active", difficulty == selectedDifficulty )
-            ]
-        , Html.Events.onClick (toMsg difficulty)
+        [ Html.Events.onClick (toMsg difficulty)
         ]
         [ Html.label
             [ Html.Attributes.for id
-            , Html.Attributes.class "button-row__label"
             ]
             [ Html.text str
             ]

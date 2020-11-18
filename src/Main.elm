@@ -72,68 +72,44 @@ view model =
     Html.main_
         []
         [ Html.img
-            [ Html.Attributes.class "banner"
-            , Html.Attributes.src "assets/svgs/heart_banner.svg"
+            [ Html.Attributes.src "assets/svgs/heart_banner.svg"
             ]
             []
         , Html.section
-            [ Html.Attributes.class "modifiers"
-            , Html.Attributes.class "button-row"
-            , Html.Attributes.class "button-row--modifiers"
-            ]
+            []
             [ Html.button
-                [ Html.Attributes.class "button-row__button"
-                , Html.Attributes.class "button-row__button--skill"
-                , Html.Attributes.classList [ ( "button-row__button--active", model.skill ) ]
-                , Html.Events.onClick ToggledSkill
+                [ Html.Events.onClick ToggledSkill
                 ]
                 [ Html.span
-                    [ Html.Attributes.class "button-row__label"
-                    ]
+                    []
                     [ Html.text "Skill" ]
                 ]
             , Html.button
-                [ Html.Attributes.class "button-row__button"
-                , Html.Attributes.class "button-row__button--domain"
-                , Html.Attributes.classList [ ( "button-row__button--active", model.domain ) ]
-                , Html.Events.onClick ToggledDomain
+                [ Html.Events.onClick ToggledDomain
                 ]
                 [ Html.span
-                    [ Html.Attributes.class "button-row__label"
-                    ]
+                    []
                     [ Html.text "Domain" ]
                 ]
             , Html.button
-                [ Html.Attributes.class "button-row__button"
-                , Html.Attributes.class "button-row__button--mastery"
-                , Html.Attributes.classList [ ( "button-row__button--active", model.mastery ) ]
-                , Html.Events.onClick ToggledMastery
+                [ Html.Events.onClick ToggledMastery
                 ]
                 [ Html.span
-                    [ Html.Attributes.class "button-row__label"
-                    ]
+                    []
                     [ Html.text "Mastery" ]
                 ]
             , Html.div
-                [ Html.Attributes.class "button-row__button"
-                , Html.Attributes.class "button-row__button--assistance"
-                , Html.Attributes.classList [ ( "button-row__button--active", model.assistance > 0 ) ]
-                ]
+                []
                 [ Html.button
-                    [ Html.Attributes.class "button-row__assist-button"
-                    , Html.Attributes.class "button-row__assist-button--dec"
-                    , Html.Events.onClick DecreasedAssistance
+                    [ Html.Events.onClick DecreasedAssistance
                     ]
                     [ Html.text "-" ]
                 , Html.span
-                    [ Html.Attributes.class "button-row__label"
-                    ]
+                    []
                     [ Html.text ("Help+" ++ String.fromInt model.assistance)
                     ]
                 , Html.button
-                    [ Html.Attributes.class "button-row__assist-button"
-                    , Html.Attributes.class "button-row__assist-button--inc"
-                    , Html.Events.onClick IncreasedAssistance
+                    [ Html.Events.onClick IncreasedAssistance
                     ]
                     [ Html.text "+" ]
                 ]
@@ -143,10 +119,7 @@ view model =
                 Action.viewDifficulty SetDifficulty model.difficulty
           in
           Html.section
-            [ Html.Attributes.class "difficulty"
-            , Html.Attributes.class "button-row"
-            , Html.Attributes.class "button-row--difficulty"
-            ]
+            []
             [ viewDifficulty Action.Standard
             , viewDifficulty Action.Risky
             , viewDifficulty Action.Dangerous
@@ -159,33 +132,9 @@ view model =
                             Action.rollToOutcome r
                     in
                     Html.section
-                        [ Html.Attributes.class "button-row"
-                        , Html.Attributes.class "button-row--result"
-                        , Html.Attributes.class
-                            ("button-row--result--"
-                                ++ (case outcome of
-                                        Outcome.CritFail ->
-                                            "crit-fail"
-
-                                        Outcome.Fail ->
-                                            "fail"
-
-                                        Outcome.SuccAtCost ->
-                                            "succ-at-cost"
-
-                                        Outcome.Succ ->
-                                            "succ"
-
-                                        Outcome.CritSucc ->
-                                            "crit-succ"
-                                   )
-                            )
-                        ]
+                        []
                         [ Html.div
-                            [ Html.Attributes.class "button-row__button"
-                            , Html.Attributes.class "button-row__button--banner"
-                            , Html.Attributes.class "button-row__button--active"
-                            ]
+                            []
                             [ let
                                 critSucc =
                                     outcome == Outcome.CritSucc
@@ -194,30 +143,18 @@ view model =
                                     outcome == Outcome.CritFail
                               in
                               Html.span
-                                [ Html.Attributes.class "button-row__label"
-                                , Html.Attributes.classList
-                                    [ ( "text-effect__shine", critSucc || critFail )
-                                    , ( "text-effect__shine--crit-succ", critSucc )
-                                    , ( "text-effect__shine--crit-fail", critFail )
-                                    ]
-                                ]
+                                []
                                 [ Html.text (outcome |> Outcome.toString) ]
                             ]
                         ]
                 )
             |> Maybe.withDefault
                 (Html.section
-                    [ Html.Attributes.class "button-row"
-                    , Html.Attributes.class "button-row--result"
-                    , Html.Attributes.class "button-row--result--blurb"
-                    ]
+                    []
                     [ Html.div
-                        [ Html.Attributes.class "button-row__button"
-                        , Html.Attributes.class "button-row__button--banner"
-                        ]
+                        []
                         [ Html.span
-                            [ Html.Attributes.class "button-row__label"
-                            ]
+                            []
                             [ Html.text
                                 (case dicepool of
                                     Action.Normal _ _ ->
@@ -234,15 +171,12 @@ view model =
             |> Maybe.map Action.viewRoll
             |> Maybe.withDefault (Action.viewDicePool dicepool)
         , Html.div
-            [ Html.Attributes.class "button-row" ]
+            []
             [ Html.button
                 [ Html.Events.onClick (ClickedRollDice dicepool)
-                , Html.Attributes.class "button-row__button"
-                , Html.Attributes.class "button-row__roll-button"
                 ]
                 [ Html.span
-                    [ Html.Attributes.class "button-row__label"
-                    ]
+                    []
                     [ Html.text "Roll The Bones" ]
                 ]
             ]
