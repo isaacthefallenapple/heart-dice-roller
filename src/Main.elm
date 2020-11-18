@@ -89,14 +89,14 @@ view model =
         []
         [ Html.img
             [ Html.Attributes.src "assets/svgs/heart_banner.svg"
-            , Html.Attributes.class "[ centered ]"
+            , Html.Attributes.class "[ centered ] [ header-img ]"
             ]
             []
         , Html.main_
             [ Html.Attributes.class "[ flow wrapper centered ]"
             ]
             [ Html.section
-                [ Html.Attributes.class "[ spread ]" ]
+                [ Html.Attributes.class "[ spread ] [ modifiers ]" ]
                 [ Html.button
                     [ Html.Events.onClick ToggledSkill
                     , Html.Attributes.class "[ block-padding-300 ]"
@@ -155,7 +155,7 @@ view model =
                     Action.viewDifficulty SetDifficulty model.difficulty
               in
               Html.section
-                [ Html.Attributes.class "[ spread ]" ]
+                [ Html.Attributes.class "[ spread ] [ difficulty ]" ]
                 [ viewDifficulty Action.Standard
                 , viewDifficulty Action.Risky
                 , viewDifficulty Action.Dangerous
