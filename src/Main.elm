@@ -69,92 +69,97 @@ view model =
         dicepool =
             dicePool model
     in
-    Html.main_
+    Html.div
         []
         [ Html.img
             [ Html.Attributes.src "assets/svgs/heart_banner.svg"
+            , Html.Attributes.class "[ centered ]"
             ]
             []
-        , Html.section
-            []
-            [ Html.button
-                [ Html.Events.onClick ToggledSkill
-                ]
-                [ Html.span
-                    []
-                    [ Html.text "Skill" ]
-                ]
-            , Html.button
-                [ Html.Events.onClick ToggledDomain
-                ]
-                [ Html.span
-                    []
-                    [ Html.text "Domain" ]
-                ]
-            , Html.button
-                [ Html.Events.onClick ToggledMastery
-                ]
-                [ Html.span
-                    []
-                    [ Html.text "Mastery" ]
-                ]
-            , Html.div
-                []
+        , Html.main_
+            [ Html.Attributes.class "[ flow wrapper centered ]"
+            ]
+            [ Html.section
+                [ Html.Attributes.class "[ spread ]" ]
                 [ Html.button
-                    [ Html.Events.onClick DecreasedAssistance
+                    [ Html.Events.onClick ToggledSkill
+                    , Html.Attributes.class "[ bg-red block-padding-300 ]"
                     ]
-                    [ Html.text "-" ]
-                , Html.span
-                    []
-                    [ Html.text ("Help+" ++ String.fromInt model.assistance)
+                    [ Html.span
+                        []
+                        [ Html.text "Skill" ]
                     ]
                 , Html.button
-                    [ Html.Events.onClick IncreasedAssistance
+                    [ Html.Events.onClick ToggledDomain
+                    , Html.Attributes.class "[ bg-red block-padding-300 ]"
                     ]
-                    [ Html.text "+" ]
+                    [ Html.span
+                        []
+                        [ Html.text "Domain" ]
+                    ]
+                , Html.button
+                    [ Html.Events.onClick ToggledMastery
+                    , Html.Attributes.class "[ bg-red block-padding-300 ]"
+                    ]
+                    [ Html.span
+                        []
+                        [ Html.text "Mastery" ]
+                    ]
+                , Html.span
+                    [ Html.Attributes.class "[ bg-red block-padding-300 ]" ]
+                    [ Html.button
+                        [ Html.Events.onClick DecreasedAssistance
+                        ]
+                        [ Html.text "-" ]
+                    , Html.span
+                        []
+                        [ Html.text ("Help+" ++ String.fromInt model.assistance)
+                        ]
+                    , Html.button
+                        [ Html.Events.onClick IncreasedAssistance
+                        ]
+                        [ Html.text "+" ]
+                    ]
                 ]
-            ]
-        , let
-            viewDifficulty =
-                Action.viewDifficulty SetDifficulty model.difficulty
-          in
-          Html.section
-            []
-            [ viewDifficulty Action.Standard
-            , viewDifficulty Action.Risky
-            , viewDifficulty Action.Dangerous
-            ]
-        , model.roll
-            |> Maybe.map
-                (\r ->
-                    let
-                        outcome =
-                            Action.rollToOutcome r
-                    in
-                    Html.section
+            , let
+                viewDifficulty =
+                    Action.viewDifficulty SetDifficulty model.difficulty
+              in
+              Html.section
+                [ Html.Attributes.class "[ spread ]" ]
+                [ viewDifficulty Action.Standard
+                , viewDifficulty Action.Risky
+                , viewDifficulty Action.Dangerous
+                ]
+            , model.roll
+                |> Maybe.map
+                    (\r ->
+                        let
+                            outcome =
+                                Action.rollToOutcome r
+                        in
+                        Html.section
+                            []
+                            [ Html.div
+                                []
+                                [ let
+                                    critSucc =
+                                        outcome == Outcome.CritSucc
+
+                                    critFail =
+                                        outcome == Outcome.CritFail
+                                  in
+                                  Html.span
+                                    []
+                                    [ Html.text (outcome |> Outcome.toString) ]
+                                ]
+                            ]
+                    )
+                |> Maybe.withDefault
+                    (Html.section
                         []
                         [ Html.div
-                            []
-                            [ let
-                                critSucc =
-                                    outcome == Outcome.CritSucc
-
-                                critFail =
-                                    outcome == Outcome.CritFail
-                              in
-                              Html.span
-                                []
-                                [ Html.text (outcome |> Outcome.toString) ]
-                            ]
-                        ]
-                )
-            |> Maybe.withDefault
-                (Html.section
-                    []
-                    [ Html.div
-                        []
-                        [ Html.span
-                            []
+                            [ Html.Attributes.class "[ bg-red centered-text block-padding-400 ]" ]
                             [ Html.text
                                 (case dicepool of
                                     Action.Normal _ _ ->
@@ -165,22 +170,23 @@ view model =
                                 )
                             ]
                         ]
+                    )
+            , model.roll
+                |> Maybe.map Action.viewRoll
+                |> Maybe.withDefault (Action.viewDicePool dicepool)
+            , Html.div
+                []
+                [ Html.button
+                    [ Html.Events.onClick (ClickedRollDice dicepool)
+                    , Html.Attributes.class "[ bg-red full-width block-padding-300 ]"
                     ]
-                )
-        , model.roll
-            |> Maybe.map Action.viewRoll
-            |> Maybe.withDefault (Action.viewDicePool dicepool)
-        , Html.div
-            []
-            [ Html.button
-                [ Html.Events.onClick (ClickedRollDice dicepool)
+                    [ Html.span
+                        []
+                        [ Html.text "Roll The Bones" ]
+                    ]
                 ]
-                [ Html.span
-                    []
-                    [ Html.text "Roll The Bones" ]
-                ]
+            , History.view model.history
             ]
-        , History.view model.history
         ]
 
 

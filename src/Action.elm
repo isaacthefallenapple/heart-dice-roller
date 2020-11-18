@@ -179,6 +179,7 @@ viewDifficulty toMsg selectedDifficulty difficulty =
     in
     Html.button
         [ Html.Events.onClick (toMsg difficulty)
+        , Html.Attributes.class "[ bg-red block-padding-300 ]"
         ]
         [ Html.label
             [ Html.Attributes.for id
