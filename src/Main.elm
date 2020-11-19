@@ -89,7 +89,7 @@ view model =
         []
         [ Html.img
             [ Html.Attributes.src "assets/svgs/heart_banner.svg"
-            , Html.Attributes.class "[ centered ] [ header-img ]"
+            , Html.Attributes.class "[ centered ] [ gap-top-400 ] [ header-img ]"
             ]
             []
         , Html.main_
