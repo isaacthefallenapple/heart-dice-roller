@@ -137,19 +137,15 @@ barHeight =
 view : History -> Html.Html msg
 view ((History { record }) as history) =
     Html.div
-        [ Html.Attributes.class "button-row"
-        ]
-        [ Html.details
-            [ Html.Attributes.class "button-row__button" ]
-            [ Html.summary
-                [ Html.Attributes.class "button-row__summary" ]
-                [ Html.span
-                    [ Html.Attributes.class "button-row__label"
-                    ]
-                    [ Html.text "History" ]
-                ]
+        []
+        [ Html.div
+            [ Html.Attributes.class "bg-red block-padding-400 inline-padding-800"
+            ]
+            [ Html.span
+                [ Html.Attributes.class "centered-text centered" ]
+                [ Html.text "History" ]
             , Html.div
-                [ Html.Attributes.class "history" ]
+                [ Html.Attributes.class "spread align-items-start gap-top-300" ]
                 [ viewRecord record
                 , viewChart history
                 ]
@@ -160,12 +156,11 @@ view ((History { record }) as history) =
 viewRecord : List Outcome.Outcome -> Html.Html msg
 viewRecord outcomes =
     Html.ul
-        [ Html.Attributes.class "history__record" ]
+        [ Html.Attributes.class "record font-size-300 max-height-800" ]
         (List.map
             (\outcome ->
                 Html.li
-                    [ Html.Attributes.class "history__item"
-                    ]
+                    []
                     [ Html.text (Outcome.toString outcome) ]
             )
             outcomes
@@ -189,7 +184,7 @@ viewChart history =
     in
     Svg.svg
         [ Svg.Attributes.viewBox viewBox
-        , Svg.Attributes.class "history__chart"
+        , Svg.Attributes.class "history__chart fill-base"
         ]
         (List.append
             [ Svg.line
@@ -197,7 +192,7 @@ viewChart history =
                 , Svg.Attributes.y1 "0"
                 , Svg.Attributes.x2 delimX
                 , Svg.Attributes.y1 "100%"
-                , Svg.Attributes.class "history__delim"
+                , Svg.Attributes.class "history__delim stroke-base"
                 ]
                 []
             ]
@@ -277,6 +272,7 @@ viewLabel x y outcome =
         , Svg.Attributes.width <| String.fromFloat labelWidth
         , Svg.Attributes.height <| String.fromFloat rowHeight
         , Svg.Attributes.class "history__label"
+        , Svg.Attributes.class "font-size-200"
         ]
         [ Svg.text_
             [ Svg.Attributes.x "100%"

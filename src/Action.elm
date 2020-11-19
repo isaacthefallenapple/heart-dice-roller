@@ -91,30 +91,35 @@ diceFromRollResult difficulty results =
             List.length results + difficultyToInt difficulty - 1
 
         indexed =
-            List.indexedMap (\i v -> ( i, v )) results
+            List.indexedMap Tuple.pair results
 
         sorted =
             List.sortBy Tuple.second indexed
     in
     sorted
         |> List.indexedMap
-            (\i ( j, v ) ->
-                ( j
-                , { ty =
-                        if i > subThreshold then
-                            Die.Subtracted
+            (\sortedIdx ( originalIdx, value ) ->
+                ( originalIdx
+                , let
+                    ( ty, isHighest ) =
+                        if sortedIdx > subThreshold then
+                            ( Die.GreyedOut, False )
 
-                        else if i == subThreshold then
-                            Die.Highlit
+                        else if sortedIdx == subThreshold then
+                            ( Die.Default, True )
 
                         else
-                            Die.Default
-                  , value = Just v
-                  }
+                            ( Die.Default, False )
+                  in
+                  Die.Die
+                    { ty = ty
+                    , value = value
+                    , isHighest = isHighest
+                    }
                 )
             )
         |> List.sortBy Tuple.first
-        |> List.map (\( _, d ) -> d)
+        |> List.map Tuple.second
 
 
 viewDicePool : DicePool -> Html msg
@@ -123,25 +128,24 @@ viewDicePool =
         (\d n ->
             List.map
                 (\i ->
-                    { ty =
-                        if i > n + difficultyToInt d then
-                            Die.Subtracted
+                    Die.Empty
+                        (if i > n + difficultyToInt d then
+                            Die.GreyedOut
 
-                        else
+                         else
                             Die.Default
-                    , value = Nothing
-                    }
+                        )
                 )
                 (List.range 1 n)
         )
-        (\_ -> { ty = Die.Single, value = Nothing })
+        (\_ -> Die.Empty Die.Difficult)
 
 
 viewRoll : Roll -> Html msg
 viewRoll =
     viewAction
         diceFromRollResult
-        (\v -> { ty = Die.Single, value = Just v })
+        (\v -> Die.Die { ty = Die.Difficult, value = v, isHighest = True })
 
 
 viewRollResult : DicePool -> Maybe Roll -> Html msg
@@ -149,7 +153,7 @@ viewRollResult dicePool maybeRoll =
     case maybeRoll of
         Nothing ->
             Html.div
-                [ Html.Attributes.class "bg-red centered-text"
+                [ Html.Attributes.class "bg-red centered-text block-padding-400"
                 ]
                 [ Html.text
                     (case dicePool of
@@ -163,7 +167,7 @@ viewRollResult dicePool maybeRoll =
 
         Just roll ->
             Html.div
-                [ Html.Attributes.class "bg-red-dark centered-text shadow"
+                [ Html.Attributes.class "bg-red-dark centered-text block-padding-400 shadow"
                 ]
                 [ Html.text (Outcome.toString (rollToOutcome roll)) ]
 
@@ -171,7 +175,7 @@ viewRollResult dicePool maybeRoll =
 viewAction : (Difficulty -> n -> List Die) -> (d -> Die) -> Action n d -> Html msg
 viewAction normalToDice difficultToDie action =
     Html.div
-        [ Html.Attributes.class "action" ]
+        [ Html.Attributes.class "flex flex-center-vert flex-center-hor block-padding-200" ]
         (case action of
             Normal difficulty n ->
                 List.map Die.view (normalToDice difficulty n)
@@ -184,8 +188,19 @@ viewAction normalToDice difficultToDie action =
 viewDifficulty : (Difficulty -> msg) -> Difficulty -> Difficulty -> Html msg
 viewDifficulty toMsg selectedDifficulty difficulty =
     let
-        str =
-            case difficulty of
+        isSelected =
+            difficulty == selectedDifficulty
+    in
+    Html.button
+        [ Html.Events.onClick (toMsg difficulty)
+        , Html.Attributes.class "[ bg-red block-padding-300 ]"
+        , Html.Attributes.classList
+            [ ( "bg-red", not isSelected )
+            , ( "bg-red-dark shadow", isSelected )
+            ]
+        ]
+        [ Html.text
+            (case difficulty of
                 Standard ->
                     "Standard"
 
@@ -194,25 +209,5 @@ viewDifficulty toMsg selectedDifficulty difficulty =
 
                 Dangerous ->
                     "Dangerous"
-
-        strLower =
-            String.toLower str
-
-        id =
-            "button-row__radio--" ++ strLower
-    in
-    Html.button
-        [ Html.Attributes.class "button-row__button"
-        , Html.Attributes.class ("button-row__button--" ++ strLower)
-        , Html.Attributes.classList
-            [ ( "button-row__button--active", difficulty == selectedDifficulty )
-            ]
-        , Html.Events.onClick (toMsg difficulty)
-        ]
-        [ Html.label
-            [ Html.Attributes.for id
-            , Html.Attributes.class "button-row__label"
-            ]
-            [ Html.text str
-            ]
+            )
         ]

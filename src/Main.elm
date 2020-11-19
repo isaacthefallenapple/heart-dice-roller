@@ -15,6 +15,19 @@ import Svg
 import Svg.Attributes
 
 
+classListCond : List String -> List String -> Bool -> Html.Attribute msg
+classListCond ifFalse ifTrue condition =
+    Html.Attributes.class
+        (String.join " "
+            (if condition then
+                ifTrue
+
+             else
+                ifFalse
+            )
+        )
+
+
 type alias Model =
     { skill : Bool
     , domain : Bool
@@ -68,109 +81,143 @@ view model =
     let
         dicepool =
             dicePool model
+
+        buttonClasses =
+            classListCond [ "bg-red" ] [ "bg-red-dark", "shadow" ]
     in
-    Html.main_
+    Html.div
         []
         [ Html.img
-            [ Html.Attributes.class "banner"
-            , Html.Attributes.src "assets/svgs/heart_banner.svg"
+            [ Html.Attributes.src "assets/svgs/heart_banner.svg"
+            , Html.Attributes.alt "Heart"
+            , Html.Attributes.class "[ centered ] [ gap-top-400 ] [ header-img ]"
             ]
             []
-        , Html.section
-            [ Html.Attributes.class "modifiers"
-            , Html.Attributes.class "button-row"
-            , Html.Attributes.class "button-row--modifiers"
-            ]
-            [ Html.button
-                [ Html.Attributes.class "button-row__button"
-                , Html.Attributes.class "button-row__button--skill"
-                , Html.Attributes.classList [ ( "button-row__button--active", model.skill ) ]
-                , Html.Events.onClick ToggledSkill
-                ]
-                [ Html.span
-                    [ Html.Attributes.class "button-row__label"
-                    ]
-                    [ Html.text "Skill" ]
-                ]
-            , Html.button
-                [ Html.Attributes.class "button-row__button"
-                , Html.Attributes.class "button-row__button--domain"
-                , Html.Attributes.classList [ ( "button-row__button--active", model.domain ) ]
-                , Html.Events.onClick ToggledDomain
-                ]
-                [ Html.span
-                    [ Html.Attributes.class "button-row__label"
-                    ]
-                    [ Html.text "Domain" ]
-                ]
-            , Html.button
-                [ Html.Attributes.class "button-row__button"
-                , Html.Attributes.class "button-row__button--mastery"
-                , Html.Attributes.classList [ ( "button-row__button--active", model.mastery ) ]
-                , Html.Events.onClick ToggledMastery
-                ]
-                [ Html.span
-                    [ Html.Attributes.class "button-row__label"
-                    ]
-                    [ Html.text "Mastery" ]
-                ]
-            , Html.div
-                [ Html.Attributes.class "button-row__button"
-                , Html.Attributes.class "button-row__button--assistance"
-                , Html.Attributes.classList [ ( "button-row__button--active", model.assistance > 0 ) ]
-                ]
-                [ Html.button
-                    [ Html.Attributes.class "button-row__assist-button"
-                    , Html.Attributes.class "button-row__assist-button--dec"
-                    , Html.Events.onClick DecreasedAssistance
-                    ]
-                    [ Html.text "-" ]
-                , Html.span
-                    [ Html.Attributes.class "button-row__label"
-                    ]
-                    [ Html.text ("Help+" ++ String.fromInt model.assistance)
-                    ]
-                , Html.button
-                    [ Html.Attributes.class "button-row__assist-button"
-                    , Html.Attributes.class "button-row__assist-button--inc"
-                    , Html.Events.onClick IncreasedAssistance
-                    ]
-                    [ Html.text "+" ]
-                ]
-            ]
-        , let
-            viewDifficulty =
-                Action.viewDifficulty SetDifficulty model.difficulty
-          in
-          Html.section
-            [ Html.Attributes.class "difficulty"
-            , Html.Attributes.class "button-row"
-            , Html.Attributes.class "button-row--difficulty"
-            ]
-            [ viewDifficulty Action.Standard
-            , viewDifficulty Action.Risky
-            , viewDifficulty Action.Dangerous
-            ]
-        , Html.section
-            []
-            [ Action.viewRollResult dicepool model.roll ]
-        , model.roll
-            |> Maybe.map Action.viewRoll
-            |> Maybe.withDefault (Action.viewDicePool dicepool)
         , Html.div
-            [ Html.Attributes.class "button-row" ]
-            [ Html.button
-                [ Html.Events.onClick (ClickedRollDice dicepool)
-                , Html.Attributes.class "button-row__button"
-                , Html.Attributes.class "button-row__roll-button"
+            [ Html.Attributes.class "[ wrapper ] [ container-main ]" ]
+            [ Html.main_
+                [ Html.Attributes.class "[ flow ]"
                 ]
-                [ Html.span
-                    [ Html.Attributes.class "button-row__label"
+                [ Html.section
+                    [ Html.Attributes.class "[ spread two-by-two ] [ modifiers ]" ]
+                    [ Html.button
+                        [ Html.Events.onClick ToggledSkill
+                        , Html.Attributes.class "[ block-padding-300 ]"
+                        , buttonClasses model.skill
+                        ]
+                        [ Html.span
+                            []
+                            [ Html.text "Skill" ]
+                        ]
+                    , Html.button
+                        [ Html.Events.onClick ToggledDomain
+                        , Html.Attributes.class "[ bg-red block-padding-300 ]"
+                        , buttonClasses model.domain
+                        ]
+                        [ Html.span
+                            []
+                            [ Html.text "Domain" ]
+                        ]
+                    , Html.button
+                        [ Html.Events.onClick ToggledMastery
+                        , Html.Attributes.class "[ bg-red block-padding-300 ]"
+                        , buttonClasses model.mastery
+                        ]
+                        [ Html.span
+                            []
+                            [ Html.text "Mastery" ]
+                        ]
+                    , Html.span
+                        [ Html.Attributes.class "[ bg-red block-padding-300 centered-text ] [ help ]"
+                        , buttonClasses (model.assistance > 0)
+                        ]
+                        [ Html.button
+                            (List.append
+                                [ Html.Events.onClick DecreasedAssistance
+                                ]
+                                (if model.assistance == 0 then
+                                    [ Html.Attributes.attribute "data-state" "greyed-out" ]
+
+                                 else
+                                    []
+                                )
+                            )
+                            [ Html.text "-" ]
+                        , Html.span
+                            []
+                            [ Html.text ("Help+" ++ String.fromInt model.assistance)
+                            ]
+                        , Html.button
+                            [ Html.Events.onClick IncreasedAssistance
+                            ]
+                            [ Html.text "+" ]
+                        ]
                     ]
-                    [ Html.text "Roll The Bones" ]
+                , let
+                    viewDifficulty =
+                        Action.viewDifficulty SetDifficulty model.difficulty
+                  in
+                  Html.section
+                    [ Html.Attributes.class "[ spread two-by-two ] [ difficulty ]" ]
+                    [ viewDifficulty Action.Standard
+                    , viewDifficulty Action.Risky
+                    , viewDifficulty Action.Dangerous
+                    ]
+                , Action.viewRollResult dicepool model.roll
+                , model.roll
+                    |> Maybe.map Action.viewRoll
+                    |> Maybe.withDefault (Action.viewDicePool dicepool)
+                , Html.div
+                    []
+                    [ Html.button
+                        [ Html.Events.onClick (ClickedRollDice dicepool)
+                        , Html.Attributes.class "[ bg-red full-width block-padding-300 ]"
+                        ]
+                        [ Html.span
+                            []
+                            [ Html.text "Roll The Bones" ]
+                        ]
+                    ]
+                , History.view model.history
+                , Die.symbol
+                ]
+            , Html.aside
+                [ Html.Attributes.class "[ bg-red block-padding-400 inline-padding-800 ] [ explanation ]" ]
+                [ Html.dl
+                    [ Html.Attributes.class "[ flow ]" ]
+                    [ Html.dt
+                        []
+                        [ Html.text "Critical Success" ]
+                    , Html.dd
+                        []
+                        [ Html.text "Succeed dramatically, and increase outgoing stress die by 1 step." ]
+                    , Html.dt
+                        []
+                        [ Html.text "Success" ]
+                    , Html.dd
+                        []
+                        [ Html.text "Succeed, and take no stress." ]
+                    , Html.dt
+                        []
+                        [ Html.text "Success... at a Cost" ]
+                    , Html.dd
+                        []
+                        [ Html.text "Succeed dramatically, but take stress." ]
+                    , Html.dt
+                        []
+                        [ Html.text "Failure" ]
+                    , Html.dd
+                        []
+                        [ Html.text "Fail, and take stress." ]
+                    , Html.dt
+                        []
+                        [ Html.text "Critical Failure" ]
+                    , Html.dd
+                        []
+                        [ Html.text "Fail, and take double stress." ]
+                    ]
                 ]
             ]
-        , History.view model.history
         ]
 
 
