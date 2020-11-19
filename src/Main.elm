@@ -15,6 +15,13 @@ import Svg
 import Svg.Attributes
 
 
+{-| Returns either an attribute containing all classes in `ifTrue` if `condition` is `True`
+or an attribute containing all classes in `ifFalse` otherwise.
+
+    classListCond [ "class-a", "class-b" ] ["class-c"] False == Html.Attributes.class "class-a class-b"
+    classListCond [ "class-a", "class-b" ] ["class-c"] True == Html.Attributes.class "class-c"
+
+-}
 classListCond : List String -> List String -> Bool -> Html.Attribute msg
 classListCond ifFalse ifTrue condition =
     Html.Attributes.class
