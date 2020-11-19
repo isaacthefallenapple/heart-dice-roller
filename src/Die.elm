@@ -6,6 +6,9 @@ import Svg exposing (Svg)
 import Svg.Attributes
 
 
+{-| A `Die` represents the state of a die. It can either be Empty and not show anything
+or have a value to display.
+-}
 type Die
     = Empty DieType
     | Die
@@ -15,12 +18,16 @@ type Die
         }
 
 
+{-| A `Die` can have different types that affect its look.
+-}
 type DieType
     = Default
     | GreyedOut
     | Difficult
 
 
+{-| Converts a `DieType` to a set of classes corresponding to the correct styling of the die.
+-}
 typeToDieStyle : DieType -> Svg.Attribute msg
 typeToDieStyle ty =
     let
@@ -43,6 +50,8 @@ typeToDieStyle ty =
         )
 
 
+{-| Converts a `DieType` to a set of classes corresponding to the correct styling of the die's label.
+-}
 typeToLabelStyle : DieType -> Svg.Attribute msg
 typeToLabelStyle ty =
     let
@@ -62,6 +71,8 @@ typeToLabelStyle ty =
         )
 
 
+{-| Renders a `Die`.
+-}
 view : Die -> Svg msg
 view die =
     case die of
@@ -107,6 +118,8 @@ view die =
                 ]
 
 
+{-| Renders a die's outline.
+-}
 viewOutline : Svg msg
 viewOutline =
     Svg.use
@@ -116,6 +129,8 @@ viewOutline =
         []
 
 
+{-| Renders a die's label.
+-}
 viewLabel : DieType -> Int -> Svg msg
 viewLabel ty n =
     let
@@ -153,6 +168,8 @@ viewLabel ty n =
         ]
 
 
+{-| Defines the SVG symbol to use for a die's outline.
+-}
 symbol : Svg msg
 symbol =
     Svg.symbol
