@@ -176,6 +176,7 @@ view model =
                     ]
                 ]
             , History.view model.history
+            , Die.symbol
             ]
         ]
 

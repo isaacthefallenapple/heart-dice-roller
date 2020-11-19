@@ -46,6 +46,10 @@
 	padding-block: 1rem;
 }
 
+.display-none {
+	display: none;
+}
+
 *,
 *::before,
 *::after {
@@ -153,4 +157,78 @@ main {
 			color: #{'rgb(var(--color-base-rgb), var(--color-base-alpha))'};
 		}
 	}
+}
+
+.round-linejoin {
+	stroke-linejoin: round;
+}
+
+.bevel-linejoin {
+	stroke-linejoin: bevel;
+}
+
+.round-linecap {
+	stroke-linecap: round;
+}
+
+.fill-red-dark {
+	fill: var(--color-red-dark);
+}
+
+.fill-red {
+	fill: var(--color-red);
+}
+
+.fill-black {
+	fill: black;
+}
+
+.fill-none {
+	fill: none;
+}
+
+.stroke-red-dark {
+	stroke: var(--color-red-dark);
+}
+
+.stroke-red {
+	stroke: var(--color-red);
+}
+
+.stroke-black {
+	stroke: black;
+}
+
+.stroke-current {
+	stroke: currentColor;
+}
+
+.opacity-40 {
+	opacity: 0.4;
+}
+
+.d10 {
+	width: 4em;
+
+	&[data-type='highlit'] {
+		width: 5em;
+	}
+
+	.outline {
+		stroke-width: 2px;
+	}
+
+	.die-value {
+		font-size: 40px;
+		line-height: 1.25;
+		font-family: 'Pirata One';
+		text-anchor: middle;
+		stroke-width: 1.6;
+		paint-order: markers stroke fill;
+
+		&[data-is-10='true'] {
+			font-size: 34.5px;
+		}
+	}
+
 }
