@@ -9,41 +9,64 @@ import Svg
 import Svg.Attributes
 
 
+{-| The maximum width a label takes up.
+-}
 labelWidth : Float
 labelWidth =
     75.0
 
 
+{-| The maximum width of a bar.
+-}
 barWidth : Float
 barWidth =
     180.0
 
 
+{-| How heigh a bar should bar
+-}
+barHeight : Float
+barHeight =
+    9.0
+
+
+{-| The padding between the labels and bars.
+-}
 labelBarPadding : Float
 labelBarPadding =
     20.0
 
 
+{-| The height a single row with one label and bar should take up.
+-}
 rowHeight : Float
 rowHeight =
     16.0
 
 
+{-| The width of the tag at the end of a bar that displays its value.
+-}
 percentageTagWidth : Float
 percentageTagWidth =
     25.0
 
 
+{-| The top and bottom padding of the bar chart.
+-}
 topBottomPadding : Float
 topBottomPadding =
     5.0
 
 
+{-| How many rolls should be kept around at any one time.
+-}
 maxRecordLength : Int
 maxRecordLength =
     1000
 
 
+{-| `History` keeps a record of rolls and can calculate stats based on them.
+-}
 type History
     = History
         { n : Int
@@ -52,6 +75,8 @@ type History
         }
 
 
+{-| An empty `History` with no records.
+-}
 empty : History
 empty =
     History
@@ -61,6 +86,8 @@ empty =
         }
 
 
+{-| Updates a `History` with a new `Outcome`.
+-}
 update : Outcome.Outcome -> History -> History
 update outcome (History history) =
     History
@@ -80,6 +107,8 @@ update outcome (History history) =
         }
 
 
+{-| Returns each `Outcome` and its corresponding percentage of occurring.
+-}
 percentages : History -> List ( Outcome.Outcome, Float )
 percentages (History history) =
     let
@@ -99,6 +128,9 @@ percentages (History history) =
         history.stats
 
 
+{-| Returns each `Outcome` and its corresponding percentage of occurring
+as well as the percentages scaled up to 1.0.
+-}
 percentagesAndScales : History -> List ( Outcome, Float, Float )
 percentagesAndScales history =
     let
@@ -129,11 +161,8 @@ percentagesAndScales history =
 -- BAR CHART
 
 
-barHeight : Float
-barHeight =
-    9.0
-
-
+{-| Render a `History`.
+-}
 view : History -> Html.Html msg
 view ((History { record }) as history) =
     Html.div
@@ -153,6 +182,8 @@ view ((History { record }) as history) =
         ]
 
 
+{-| Render the record of `Outcome`s.
+-}
 viewRecord : List Outcome.Outcome -> Html.Html msg
 viewRecord outcomes =
     Html.ul
@@ -167,6 +198,8 @@ viewRecord outcomes =
         )
 
 
+{-| Render a bar chart based on `history`.
+-}
 viewChart : History -> Svg.Svg msg
 viewChart history =
     let
@@ -214,6 +247,8 @@ viewChart history =
         )
 
 
+{-| Render a single bar of a bar chart.
+-}
 viewBar : Float -> Float -> Float -> Float -> Svg.Svg msg
 viewBar x y percentage scale =
     let
@@ -247,6 +282,13 @@ viewBar x y percentage scale =
         ]
 
 
+{-| Format `f` as a percentage.
+
+    formatPercent 0.789 == "78.9%"
+    formatPercent 0.1 == "10%"
+    formatPercent 0.5643 == "56.43%"
+
+-}
 formatPercent : Float -> String
 formatPercent f =
     let
@@ -264,6 +306,8 @@ formatPercent f =
         ++ "%"
 
 
+{-| Render a single label of a bar chart.
+-}
 viewLabel : Float -> Float -> Outcome.Outcome -> Svg.Svg msg
 viewLabel x y outcome =
     Svg.svg
