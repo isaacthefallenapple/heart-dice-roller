@@ -70,7 +70,11 @@ view die =
                 [ Svg.Attributes.viewBox "0 0 70 70"
                 , Svg.Attributes.class "d10"
                 ]
-                [ Svg.g
+                [ Svg.desc
+                    []
+                    [ Svg.text "A 10-sided die showing no number"
+                    ]
+                , Svg.g
                     [ Svg.Attributes.class "die"
                     , typeToDieStyle ty
                     ]
@@ -89,7 +93,11 @@ view die =
                         "false"
                     )
                 ]
-                [ Svg.g
+                [ Svg.desc
+                    []
+                    [ Svg.text ("A 10-sided die showing a " ++ String.fromInt value)
+                    ]
+                , Svg.g
                     [ Svg.Attributes.class "die"
                     , typeToDieStyle ty
                     ]
