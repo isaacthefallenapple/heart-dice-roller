@@ -210,7 +210,7 @@ main {
 .d10 {
 	width: 4em;
 
-	&[data-type='highlit'] {
+	&[data-is-highest='true'] {
 		width: 5em;
 	}
 

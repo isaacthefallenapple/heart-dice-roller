@@ -91,30 +91,35 @@ diceFromRollResult difficulty results =
             List.length results + difficultyToInt difficulty - 1
 
         indexed =
-            List.indexedMap (\i v -> ( i, v )) results
+            List.indexedMap Tuple.pair results
 
         sorted =
             List.sortBy Tuple.second indexed
     in
     sorted
         |> List.indexedMap
-            (\i ( j, v ) ->
-                ( j
-                , { ty =
-                        if i > subThreshold then
-                            Die.Subtracted
+            (\sortedIdx ( originalIdx, value ) ->
+                ( originalIdx
+                , let
+                    ( ty, isHighest ) =
+                        if sortedIdx > subThreshold then
+                            ( Die.GreyedOut, False )
 
-                        else if i == subThreshold then
-                            Die.Highlit
+                        else if sortedIdx == subThreshold then
+                            ( Die.Default, True )
 
                         else
-                            Die.Default
-                  , value = Just v
-                  }
+                            ( Die.Default, False )
+                  in
+                  Die.Die
+                    { ty = ty
+                    , value = value
+                    , isHighest = isHighest
+                    }
                 )
             )
         |> List.sortBy Tuple.first
-        |> List.map (\( _, d ) -> d)
+        |> List.map Tuple.second
 
 
 viewDicePool : DicePool -> Html msg
@@ -123,25 +128,24 @@ viewDicePool =
         (\d n ->
             List.map
                 (\i ->
-                    { ty =
-                        if i > n + difficultyToInt d then
-                            Die.Subtracted
+                    Die.Empty
+                        (if i > n + difficultyToInt d then
+                            Die.GreyedOut
 
-                        else
+                         else
                             Die.Default
-                    , value = Nothing
-                    }
+                        )
                 )
                 (List.range 1 n)
         )
-        (\_ -> { ty = Die.Single, value = Nothing })
+        (\_ -> Die.Empty Die.Difficult)
 
 
 viewRoll : Roll -> Html msg
 viewRoll =
     viewAction
         diceFromRollResult
-        (\v -> { ty = Die.Single, value = Just v })
+        (\v -> Die.Die { ty = Die.Difficult, value = v, isHighest = True })
 
 
 viewRollResult : DicePool -> Maybe Roll -> Html msg
