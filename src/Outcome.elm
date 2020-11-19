@@ -1,5 +1,8 @@
 module Outcome exposing (Outcome(..), all, toString)
 
+{-| An `Outcome` represents one possible outcome of a roll in Heart.
+-}
+
 
 type Outcome
     = CritFail
@@ -21,6 +24,8 @@ all =
     ]
 
 
+{-| Converts an `Outcome` into a string representation.
+-}
 toString : Outcome -> String
 toString outcome =
     case outcome of
