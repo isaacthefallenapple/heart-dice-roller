@@ -175,7 +175,7 @@ viewRollResult dicePool maybeRoll =
 viewAction : (Difficulty -> n -> List Die) -> (d -> Die) -> Action n d -> Html msg
 viewAction normalToDice difficultToDie action =
     Html.div
-        []
+        [ Html.Attributes.class "flex flex-center-vert flex-center-hor block-padding-200" ]
         (case action of
             Normal difficulty n ->
                 List.map Die.view (normalToDice difficulty n)

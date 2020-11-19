@@ -38,6 +38,10 @@
 	text-align: center;
 }
 
+.block-padding-200 {
+	padding-block: 0.6rem;
+}
+
 .block-padding-300 {
 	padding-block: 0.8rem;
 }
@@ -114,6 +118,18 @@ ol[class] {
 .centered {
 	display: block;
 	margin-inline: auto;
+}
+
+.flex {
+	display: flex;
+}
+
+.flex-center-vert {
+	align-items: center;
+}
+
+.flex-center-hor {
+	justify-content: center;
 }
 
 .spread {
@@ -265,7 +281,8 @@ ol[class] {
 	width: 4em;
 
 	&[data-is-highest='true'] {
-		width: 5em;
+		transform-origin: center;
+		transform: scale(1.2);
 	}
 
 	.outline {
