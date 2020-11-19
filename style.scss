@@ -46,8 +46,29 @@
 	padding-block: 1rem;
 }
 
+.inline-padding-800 {
+	padding-inline: 2rem;
+}
+
+.gap-top-300 {
+	margin-top: 0.8rem
+}
+
+.max-height-800 {
+	max-height: 8rem;
+	overflow-y: auto;
+}
+
 .display-none {
 	display: none;
+}
+
+.font-size-200 {
+	font-size: 1rem;
+}
+
+.font-size-300 {
+	font-size: 1.5rem;
 }
 
 *,
@@ -74,6 +95,12 @@ main {
 	min-width: 300px;
 }
 
+ul[class],
+ol[class] {
+	margin: 0;
+	padding: 0;
+}
+
 .flow>*+* {
 	margin-top: var(--flow-space);
 }
@@ -92,12 +119,19 @@ main {
 .spread {
 	display: flex;
 	justify-content: space-between;
-	align-items: stretch;
 	column-gap: var(--inner-gap);
 
 	>* {
 		flex: 1 1 100%;
 	}
+}
+
+.align-items-stretch {
+	align-items: stretch;
+}
+
+.align-items-start {
+	align-items: flex-start;
 }
 
 @media screen and (max-width: 650px) {
@@ -159,6 +193,14 @@ main {
 	}
 }
 
+.record {
+	list-style-type: none;
+
+	&:first-child {
+		flex-basis: 50%;
+	}
+}
+
 .round-linejoin {
 	stroke-linejoin: round;
 }
@@ -183,6 +225,14 @@ main {
 	fill: black;
 }
 
+.fill-base {
+	fill: var(--color-base);
+}
+
+.fill-current {
+	fill: currentColor;
+}
+
 .fill-none {
 	fill: none;
 }
@@ -197,6 +247,10 @@ main {
 
 .stroke-black {
 	stroke: black;
+}
+
+.stroke-base {
+	stroke: var(--color-base);
 }
 
 .stroke-current {
