@@ -93,91 +93,130 @@ view model =
             , Html.Attributes.class "[ centered ] [ gap-top-400 ] [ header-img ]"
             ]
             []
-        , Html.main_
-            [ Html.Attributes.class "[ flow wrapper centered ]"
-            ]
-            [ Html.section
-                [ Html.Attributes.class "[ spread two-by-two ] [ modifiers ]" ]
-                [ Html.button
-                    [ Html.Events.onClick ToggledSkill
-                    , Html.Attributes.class "[ block-padding-300 ]"
-                    , buttonClasses model.skill
-                    ]
-                    [ Html.span
-                        []
-                        [ Html.text "Skill" ]
-                    ]
-                , Html.button
-                    [ Html.Events.onClick ToggledDomain
-                    , Html.Attributes.class "[ bg-red block-padding-300 ]"
-                    , buttonClasses model.domain
-                    ]
-                    [ Html.span
-                        []
-                        [ Html.text "Domain" ]
-                    ]
-                , Html.button
-                    [ Html.Events.onClick ToggledMastery
-                    , Html.Attributes.class "[ bg-red block-padding-300 ]"
-                    , buttonClasses model.mastery
-                    ]
-                    [ Html.span
-                        []
-                        [ Html.text "Mastery" ]
-                    ]
-                , Html.span
-                    [ Html.Attributes.class "[ bg-red block-padding-300 centered-text ] [ help ]"
-                    , buttonClasses (model.assistance > 0)
-                    ]
+        , Html.div
+            [ Html.Attributes.class "[ wrapper ] [ container-main ]" ]
+            [ Html.main_
+                [ Html.Attributes.class "[ flow ]"
+                ]
+                [ Html.section
+                    [ Html.Attributes.class "[ spread two-by-two ] [ modifiers ]" ]
                     [ Html.button
-                        (List.append
-                            [ Html.Events.onClick DecreasedAssistance
-                            ]
-                            (if model.assistance == 0 then
-                                [ Html.Attributes.attribute "data-state" "greyed-out" ]
-
-                             else
-                                []
-                            )
-                        )
-                        [ Html.text "-" ]
-                    , Html.span
-                        []
-                        [ Html.text ("Help+" ++ String.fromInt model.assistance)
+                        [ Html.Events.onClick ToggledSkill
+                        , Html.Attributes.class "[ block-padding-300 ]"
+                        , buttonClasses model.skill
+                        ]
+                        [ Html.span
+                            []
+                            [ Html.text "Skill" ]
                         ]
                     , Html.button
-                        [ Html.Events.onClick IncreasedAssistance
+                        [ Html.Events.onClick ToggledDomain
+                        , Html.Attributes.class "[ bg-red block-padding-300 ]"
+                        , buttonClasses model.domain
                         ]
-                        [ Html.text "+" ]
+                        [ Html.span
+                            []
+                            [ Html.text "Domain" ]
+                        ]
+                    , Html.button
+                        [ Html.Events.onClick ToggledMastery
+                        , Html.Attributes.class "[ bg-red block-padding-300 ]"
+                        , buttonClasses model.mastery
+                        ]
+                        [ Html.span
+                            []
+                            [ Html.text "Mastery" ]
+                        ]
+                    , Html.span
+                        [ Html.Attributes.class "[ bg-red block-padding-300 centered-text ] [ help ]"
+                        , buttonClasses (model.assistance > 0)
+                        ]
+                        [ Html.button
+                            (List.append
+                                [ Html.Events.onClick DecreasedAssistance
+                                ]
+                                (if model.assistance == 0 then
+                                    [ Html.Attributes.attribute "data-state" "greyed-out" ]
+
+                                 else
+                                    []
+                                )
+                            )
+                            [ Html.text "-" ]
+                        , Html.span
+                            []
+                            [ Html.text ("Help+" ++ String.fromInt model.assistance)
+                            ]
+                        , Html.button
+                            [ Html.Events.onClick IncreasedAssistance
+                            ]
+                            [ Html.text "+" ]
+                        ]
                     ]
-                ]
-            , let
-                viewDifficulty =
-                    Action.viewDifficulty SetDifficulty model.difficulty
-              in
-              Html.section
-                [ Html.Attributes.class "[ spread two-by-two ] [ difficulty ]" ]
-                [ viewDifficulty Action.Standard
-                , viewDifficulty Action.Risky
-                , viewDifficulty Action.Dangerous
-                ]
-            , Action.viewRollResult dicepool model.roll
-            , model.roll
-                |> Maybe.map Action.viewRoll
-                |> Maybe.withDefault (Action.viewDicePool dicepool)
-            , Html.div
-                []
-                [ Html.button
-                    [ Html.Events.onClick (ClickedRollDice dicepool)
-                    , Html.Attributes.class "[ bg-red full-width block-padding-300 ]"
+                , let
+                    viewDifficulty =
+                        Action.viewDifficulty SetDifficulty model.difficulty
+                  in
+                  Html.section
+                    [ Html.Attributes.class "[ spread two-by-two ] [ difficulty ]" ]
+                    [ viewDifficulty Action.Standard
+                    , viewDifficulty Action.Risky
+                    , viewDifficulty Action.Dangerous
                     ]
-                    [ Html.span
+                , Action.viewRollResult dicepool model.roll
+                , model.roll
+                    |> Maybe.map Action.viewRoll
+                    |> Maybe.withDefault (Action.viewDicePool dicepool)
+                , Html.div
+                    []
+                    [ Html.button
+                        [ Html.Events.onClick (ClickedRollDice dicepool)
+                        , Html.Attributes.class "[ bg-red full-width block-padding-300 ]"
+                        ]
+                        [ Html.span
+                            []
+                            [ Html.text "Roll The Bones" ]
+                        ]
+                    ]
+                , History.view model.history
+                , Die.symbol
+                ]
+            , Html.aside
+                [ Html.Attributes.class "[ bg-red block-padding-400 inline-padding-800 ] [ explanation ]" ]
+                [ Html.dl
+                    [ Html.Attributes.class "[ flow ]" ]
+                    [ Html.dt
                         []
-                        [ Html.text "Roll The Bones" ]
+                        [ Html.text "Critical Success" ]
+                    , Html.dd
+                        []
+                        [ Html.text "Succeed dramatically, and increase outgoing stress die by 1 step." ]
+                    , Html.dt
+                        []
+                        [ Html.text "Success" ]
+                    , Html.dd
+                        []
+                        [ Html.text "Succeed, and take no stress." ]
+                    , Html.dt
+                        []
+                        [ Html.text "Success... at a Cost" ]
+                    , Html.dd
+                        []
+                        [ Html.text "Succeed dramatically, but take stress." ]
+                    , Html.dt
+                        []
+                        [ Html.text "Failure" ]
+                    , Html.dd
+                        []
+                        [ Html.text "Fail, and take stress." ]
+                    , Html.dt
+                        []
+                        [ Html.text "Critical Failure" ]
+                    , Html.dd
+                        []
+                        [ Html.text "Fail, and take double stress." ]
                     ]
                 ]
-            , History.view model.history
-            , Die.symbol
             ]
         ]
 
