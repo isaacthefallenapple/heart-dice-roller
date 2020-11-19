@@ -40,7 +40,7 @@ type alias Model =
     , domain : Bool
     , mastery : Bool
     , difficulty : Action.Difficulty
-    , assistance : Int
+    , help : Int
     , roll : Maybe Action.Roll
     , history : History.History
     }
@@ -62,7 +62,7 @@ dicePool model =
                         )
                         [ model.skill, model.domain, model.mastery ]
                     )
-                + model.assistance
+                + model.help
     in
     if pool + Action.difficultyToInt model.difficulty <= 0 then
         Action.Difficult ()
@@ -77,7 +77,7 @@ initialModel =
     , domain = False
     , mastery = False
     , difficulty = Action.Standard
-    , assistance = 0
+    , help = 0
     , roll = Nothing
     , history = History.empty
     }
@@ -136,13 +136,13 @@ view model =
                         ]
                     , Html.span
                         [ Html.Attributes.class "[ bg-red block-padding-300 centered-text ] [ help ]"
-                        , buttonClasses (model.assistance > 0)
+                        , buttonClasses (model.help > 0)
                         ]
                         [ Html.button
                             (List.append
                                 [ Html.Events.onClick DecreasedAssistance
                                 ]
-                                (if model.assistance == 0 then
+                                (if model.help == 0 then
                                     [ Html.Attributes.attribute "data-state" "greyed-out" ]
 
                                  else
@@ -152,7 +152,7 @@ view model =
                             [ Html.text "-" ]
                         , Html.span
                             []
-                            [ Html.text ("Help+" ++ String.fromInt model.assistance)
+                            [ Html.text ("Help+" ++ String.fromInt model.help)
                             ]
                         , Html.button
                             [ Html.Events.onClick IncreasedAssistance
@@ -244,10 +244,10 @@ update msg model =
             ( { model | mastery = not model.mastery, roll = Nothing }, Cmd.none )
 
         DecreasedAssistance ->
-            ( { model | assistance = max 0 (model.assistance - 1), roll = Nothing }, Cmd.none )
+            ( { model | help = max 0 (model.help - 1), roll = Nothing }, Cmd.none )
 
         IncreasedAssistance ->
-            ( { model | assistance = model.assistance + 1, roll = Nothing }, Cmd.none )
+            ( { model | help = model.help + 1, roll = Nothing }, Cmd.none )
 
         RolledDice roll ->
             ( { model | roll = Just roll, history = History.update (Action.rollToOutcome roll) model.history }, Cmd.none )
